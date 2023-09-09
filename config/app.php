@@ -171,7 +171,7 @@ return [
          */
 
         barooei\User\Providers\UserServiceProvider::class,
-
+         barooei\Task\Providers\TaskServiceProvider::class,
 
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
