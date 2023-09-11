@@ -10,6 +10,8 @@ class Task extends Model
     use HasFactory;
 
 
+    protected $fillable=['title','description','user_id'];
+
     const Pending ='pending';
     const IN_ProGrEss ='in_proggress';
     const Done = 'done';

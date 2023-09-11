@@ -25,6 +25,8 @@ class AuthMiddleware
             return $next($request);
         } catch (\Throwable $e) {
 
+
+            dd($e);
             return response()->json(['message' => 'خطا در احراز هویت'], 401);
         }
     }
