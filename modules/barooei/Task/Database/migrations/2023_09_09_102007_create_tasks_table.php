@@ -18,7 +18,7 @@ return new class extends Migration
                     $table->string('title');
                     $table->text('description');
 
-                    $table->enum('type',barooei\Task\Models\Task::$type);
+                    $table->enum('type',barooei\Task\Models\Task::$type)->default(\barooei\Task\Models\Task::Pending);
 
                     $table->unsignedBigInteger('user_id');
                     $table->timestamps();
