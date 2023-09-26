@@ -16,15 +16,15 @@ use barooei\Task\Models\Task;
 
      public function store($request){
 
-        $user = new Task();
-        $user->title = $request->title;
-        $user->description = $request->description;
 
-        $user->user_id = $request->user_id;
+        return Task::create([
+            'title' =>$request->title,
+            'description' =>$request->description,
+            'user_id' =>auth()->user()->id,
 
-        $user->type = Task::Pending;
+            'type' => Task::Pending,
+        ]);
 
-      return $user;
      }
 
 
@@ -42,15 +42,18 @@ use barooei\Task\Models\Task;
 
 
 
-     public function update($attributes, $task_id){
+     public function update($task_id,$request){
+
 
 
         $task = Task::findOrFail($task_id);
-        $task->update($attributes);
+
+        $task->update([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+        ]);
 
         return $task;
-
-
 
      }
 

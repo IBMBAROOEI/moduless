@@ -29,9 +29,11 @@
 
             "barooei\\User\\":"modules/barooei/User/",
             "barooei\\Task\\":"modules/barooei/Task/"
-
-
-        }
+        },
+        "files": [
+            "app/Traits/Traitvalidation.php",
+           "app/Helper/helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

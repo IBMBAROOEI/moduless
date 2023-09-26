@@ -2,21 +2,23 @@
 
 namespace barooei\Task\Http\Controllers;
 
-use barooei\Task\Models\Task;
+use function barooei\Task\handleStatusCodes;
 use App\Http\Controllers\Controller;
 use barooei\Task\Http\Requests\TaskRequest;
 use barooei\Task\Http\Requests\Taskupdate;
-
+use Illuminate\Http\Response;
 use barooei\Task\Repositories\TaskRepo;
-// use Illuminate\Support\Facades\Validator;
+use barooei\Task\Models\Task;
 
-use Illuminate\Http\Request;
 
+use App\Traits\Traitvalidation;
 class TaskController extends Controller
 {
 
-
+ use Traitvalidation;
     public $repo;
+
+
 
     public function __construct(TaskRepo $TaskRepo)
     {
@@ -27,22 +29,10 @@ class TaskController extends Controller
     {
 
         $task = $this->repo->all();
+        return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$task]);
 
 
-
-        $response = [
-            'status' => 200,
-            'message' => 'عملیات با موفقیت انجام شد.',
-            'data' => [
-                $task
-            ]
-        ];
-
-        return response()->json($response);
     }
-
-
-
     public function save(TaskRequest $request)
     {
 
@@ -50,17 +40,10 @@ class TaskController extends Controller
         $this->helpervalidation($request);
 
         $task=$this->repo->store($request);
+        return \app\Helper\handleStatusCodes(Response::HTTP_CREATED, '', [$task]);
 
 
-        $response = [
-            'status' => 200,
-            'message' => 'عملیات با موفقیت انجام شد.',
-            'data' => [
-                $task
-            ]
-        ];
-
-        return response()->json($response);
+        // return response()->json($response,201);
     }
 
 
@@ -69,16 +52,9 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $tasks=$this->repo->show($id);
-        $response = [
-            'status' => 200,
-            'message' => 'عملیات با موفقیت انجام شد.',
-            'data' => [
-                $tasks
-            ]
-        ];
+        $task=$this->repo->show($id);
+        return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$task]);
 
-        return response()->json($response);
     }
 
 
@@ -91,39 +67,24 @@ class TaskController extends Controller
     public function delete($id)
     {
 
-        $this->repo->delete($id);
-        $response = [
-             204,
-        ];
+        $task=$this->repo->delete($id);
 
-        return response()->json($response);
+        return \app\Helper\handleStatusCodes(Response::HTTP_NO_CONTENT, '', [$task]);
+
     }
 
 
 
-    public function update(TaskRequest $request, $task_id)
+    public function update($task_id,TaskRequest $request)
     {
 
         $this->helpervalidation($request);
 
 
-        $attributes = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'user_id' => $request->user_id,
-        ];
 
-        $task=$this->repo->update($attributes,$task_id);
+       $task= $this->repo->update($task_id, $request);
 
-
-        $response = [
-            'data' =>
-            $task,
-
-
-        ];
-
-        return response()->json($response);
+       return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$task]);
     }
 
 
@@ -136,12 +97,12 @@ class TaskController extends Controller
 
         $attributes = [
             'type' => $request->type,
-         
+
         ];
 
-        $task=$this->repo->update($attributes,$task_id);
 
-        return response()->json([$task], 200);
+        $task=$this->repo->updateEnumField($attributes,$task_id);
+        return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$task]);
     }
 
 
@@ -159,7 +120,8 @@ class TaskController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return \app\Helper\handleStatusCodes(Response::HTTP_UNPROCESSABLE_ENTITY, '', [$validator->errors()]);
+            // return response()->json([], 422);
         }
 
 

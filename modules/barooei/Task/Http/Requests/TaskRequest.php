@@ -21,7 +21,7 @@ class TaskRequest extends FormRequest
         return [
             'title' => 'required|min:5',
             'description' => 'required',
-            'user_id' => 'required',
+
         ];
     }
 
@@ -35,7 +35,7 @@ public function messages()
         'title.required' => 'فیلد عنوان الزامی است.',
         'title.min' => 'حداقل طول عنوان باید ۵ کاراکتر باشد.',
         'description.required' => 'فیلد توضیحات الزامی است.',
-        'user_id.required' => 'فیلد شناسه کاربر الزامی است.',
+ 
     ];
 }
 

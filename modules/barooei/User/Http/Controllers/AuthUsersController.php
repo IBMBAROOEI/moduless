@@ -40,7 +40,24 @@ class AuthUsersController extends Controller
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
 
-            return $this->respondWithToken($token);
+              $user = Auth::user();
+
+              $token = JWTAuth::fromUser($user);
+              $response = [
+                  'status' => 200,
+                  'message' => 'عملیات با موفقیت انجام شد.',
+                  'data' => [
+                      'user' =>  $user,
+                      'token'=>$token,
+                      'expires_in' => JWTAuth::factory()->getTTL() * 60,
+                      'refresh_token' => Auth::refresh(),
+
+                  ]
+              ];
+
+              return response()->json($response);
+
+
         }
 
 
@@ -84,6 +101,8 @@ class AuthUsersController extends Controller
                 return response()->json($response);
 
 
+                //   return $this->respondWithToken($token);
+
     }
 
 
@@ -108,13 +127,19 @@ class AuthUsersController extends Controller
 
 
 
-        public function refresh()
+        public function refresh($token)
         {
+
+
             $token = JWTAuth::parseToken()->refresh();
 
             return response()->json([
                 $token
             ]);
+
+            // $tokk=$this->respondWithToken($token);
+            // return $tokk;
+
         }
 
         public function respondWithToken($token)

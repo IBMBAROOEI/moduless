@@ -35,7 +35,7 @@ public function messages()
         'name.required' => 'نام وارد نکردید',
          'email.required' => 'وارد کردن ایمیل الزامی است!',
         'email.email.required' => 'آدرس ایمیل معتبر نمی باشد!',
-
+        'email.unique' => 'این آدرس ایمیل قبلاً استفاده شده است.',
         'password.required'=>'پسورد رو وارد نکردید',
         'password_confirmation.required' =>'پسورد مطابق نیست',
 

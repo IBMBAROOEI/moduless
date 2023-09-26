@@ -22,6 +22,7 @@ class Taskupdate extends FormRequest
         public function rules()
         {
             return [
+
                 'type' => 'required|in:' . implode(',', Task::$type),
             ];
         }
@@ -35,8 +36,8 @@ public function messages()
 {
     return[
 
-        'type.required'=>'نوع تایپ رو مشخص کن ',
-
+        'type.required' => 'نوع تایپ را مشخص کنید',
+        'type.in' => 'مقدار وارد شده برای نوع تایپ معتبر نیست',
 
     ];
 }
