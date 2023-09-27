@@ -28,17 +28,7 @@ class SaveTaskTest extends TestCase
     public function test_SaveTaskTest(): void
     {
 
-        $user = User::create([
-            'name' => 'kpokpkpk کاربر',
-            'email' => 'usejojor@example.com',
-            'password' => bcrypt('password'),
-        ]);
-
-
-        $token = JWTAuth::fromUser($user);
-        $this->actingAs($user)->withHeaders([
-            'Authorization' => 'Bearer' . $token
-        ]);
+        $user =$this->datauser();
 
 
         $response = $this->post(url('api/task/save'), [
@@ -65,18 +55,7 @@ class SaveTaskTest extends TestCase
     public function test_UpdateTaskTest(): void
     {
 
-        $user = User::create([
-            'name' => 'kpokpkpk کاربر',
-            'email' => 'usejojor@example.com',
-            'password' => bcrypt('password'),
-        ]);
-
-
-        $token = JWTAuth::fromUser($user);
-        $this->actingAs($user)->withHeaders([
-            'Authorization' => 'Bearer' . $token
-        ]);
-
+        $user =$this->datauser();
         // ایجاد یک وظیفه اولیه توسط کاربر
         $task = Task::create([
             'title' =>' از بروزرسانی',
@@ -108,38 +87,45 @@ class SaveTaskTest extends TestCase
     public function test_getTaskTest(): void
     {
 
-
-        $user = User::create([
-            'name' => 'kpokpkpkکاربر',
-            'email' => 'usejojor@example.com',
-            'password' => bcrypt('password'),
-        ]);
-
-
-        $token = JWTAuth::fromUser($user);
-        $this->actingAs($user)->withHeaders([
-            'Authorization' => 'Bearer' . $token
-        ]);
-
-
-     $tasks  = Task::create([
+        $user =$this->datauser();
+      Task::create([
         'title' => 'abcdedfg',
         'description' => 'abscd',
         'user_id' => $user->id,
         'type' => Task::Pending,
     ]);
 
-     $response=$this->get('api/task/all');
+     $response=$this->get('api/task/user');
 
      $response->assertStatus(200);
 
-     $response->assertJson([
 
-        'data'=>[
-            $tasks
-        ]
-        ]);
+     $this->assertDatabaseHas('tasks', [
+        'title' => 'abcdedfg',
+        'description' => 'abscd',
+        'user_id' => $user->id,
+        'type' => Task::Pending,
+    ]);
+}
 
 
-    }
+
+
+
+ public function datauser(){
+    $user = User::create([
+        'name' => 'kpokpkpkکاربر',
+        'email' => 'usejojor@example.com',
+        'password' => bcrypt('password'),
+    ]);
+    $token = JWTAuth::fromUser($user);
+    $this->actingAs($user)->withHeaders([
+        'Authorization' => 'Bearer' . $token
+    ]);
+
+
+     return $user;
+
+ }
+
 }
