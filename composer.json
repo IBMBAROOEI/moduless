@@ -31,8 +31,8 @@
             "barooei\\Task\\":"modules/barooei/Task/"
         },
         "files": [
-            "app/Traits/Traitvalidation.php",
-           "app/Helper/helper.php"
+            "app/Helper/helper.php",
+           "app/Helper/Helpervalidate.php"
         ]
     },
     "autoload-dev": {

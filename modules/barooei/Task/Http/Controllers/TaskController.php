@@ -2,20 +2,20 @@
 
 namespace barooei\Task\Http\Controllers;
 
-use function barooei\Task\handleStatusCodes;
+
+use App\Helper\Helpervalidate;
 use App\Http\Controllers\Controller;
 use barooei\Task\Http\Requests\TaskRequest;
 use barooei\Task\Http\Requests\Taskupdate;
 use Illuminate\Http\Response;
 use barooei\Task\Repositories\TaskRepo;
 use barooei\Task\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
-
-use App\Traits\Traitvalidation;
 class TaskController extends Controller
 {
 
- use Traitvalidation;
+
     public $repo;
 
 
@@ -35,23 +35,16 @@ class TaskController extends Controller
     }
     public function save(TaskRequest $request)
     {
-
-
-        $this->helpervalidation($request);
+        Helpervalidate::helpervalidation($request);
 
         $task=$this->repo->store($request);
         return \app\Helper\handleStatusCodes(Response::HTTP_CREATED, '', [$task]);
-
-
-        // return response()->json($response,201);
     }
-
-
-
 
 
     public function show($id)
     {
+
         $task=$this->repo->show($id);
         return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$task]);
 
@@ -59,10 +52,12 @@ class TaskController extends Controller
 
 
 
+     public function getusertsak(){
 
+     $task=$this->repo->getusertsak();
+     return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$task]);
 
-
-
+     }
 
     public function delete($id)
     {
@@ -77,11 +72,7 @@ class TaskController extends Controller
 
     public function update($task_id,TaskRequest $request)
     {
-
-        $this->helpervalidation($request);
-
-
-
+        Helpervalidate::helpervalidation($request);
        $task= $this->repo->update($task_id, $request);
 
        return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$task]);
@@ -92,14 +83,12 @@ class TaskController extends Controller
     public function updateEnumField(Taskupdate $request, $task_id)
     {
 
-
-        $this->helpervalidation($request);
+        Helpervalidate::helpervalidation($request);
 
         $attributes = [
             'type' => $request->type,
 
         ];
-
 
         $task=$this->repo->updateEnumField($attributes,$task_id);
         return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$task]);
@@ -108,23 +97,5 @@ class TaskController extends Controller
 
 
 
-    public function helpervalidation(Request $request)
-    {
 
-
-
-        $validatedData = $request->validated();
-
-
-        $validator = $this->getValidationFactory()->make($request->all(), $request->rules());
-
-
-        if ($validator->fails()) {
-            return \app\Helper\handleStatusCodes(Response::HTTP_UNPROCESSABLE_ENTITY, '', [$validator->errors()]);
-            // return response()->json([], 422);
-        }
-
-
-        return $validatedData;
-    }
 }

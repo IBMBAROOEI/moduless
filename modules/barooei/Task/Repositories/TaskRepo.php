@@ -4,6 +4,7 @@ namespace barooei\Task\Repositories;
 
 use barooei\Task\Http\Requests\TaskRequest;
 use barooei\Task\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
  class TaskRepo{
 
@@ -31,6 +32,13 @@ use barooei\Task\Models\Task;
      public function show($id){
 
         return Task::findOrFail($id);
+     }
+
+
+
+     public function getusertsak(){
+
+        return Task::where("user_id",Auth::id())->get();
      }
 
 

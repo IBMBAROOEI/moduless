@@ -101,4 +101,45 @@ class SaveTaskTest extends TestCase
             'type' => Task::Pending,
         ]);
     }
+
+
+
+
+    public function test_getTaskTest(): void
+    {
+
+
+        $user = User::create([
+            'name' => 'kpokpkpkکاربر',
+            'email' => 'usejojor@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+
+        $token = JWTAuth::fromUser($user);
+        $this->actingAs($user)->withHeaders([
+            'Authorization' => 'Bearer' . $token
+        ]);
+
+
+     $tasks  = Task::create([
+        'title' => 'abcdedfg',
+        'description' => 'abscd',
+        'user_id' => $user->id,
+        'type' => Task::Pending,
+    ]);
+
+     $response=$this->get('api/task/all');
+
+     $response->assertStatus(200);
+
+     $response->assertJson([
+
+        'data'=>[
+            $tasks
+        ]
+        ]);
+
+
+    }
 }
