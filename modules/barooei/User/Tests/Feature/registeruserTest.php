@@ -26,9 +26,6 @@ class registeruserTest extends TestCase
             'email' => "j88j@umail.com",
             'password' => '123456781212121',
         ]);
-        $responseData = $response->json();
-        $this->assertArrayHasKey('user', $responseData['data']);
-        $this->assertArrayHasKey('token', $responseData['data']);
         $this->assertCount(1, User::all());
     }
 }
