@@ -6,16 +6,18 @@ use Illuminate\Support\ServiceProvider;
 
 class TaskServiceProvider extends ServiceProvider
 {
-    public function boot()
+
+
+    public function register()
     {
-
-
         $this->loadRoutesFrom(__DIR__ . '/../Routes/task_routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
-    public function register()
+    public function boot()
     {
-        //
+
+
+
     }
 }
