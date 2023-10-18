@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 
 use barooei\User\Repositories\UserRepo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class AuthUsersController extends Controller
 {
@@ -62,7 +63,9 @@ class AuthUsersController extends Controller
     {
         Helpervalidate::helpervalidation($request);
         $User=$this->repo->register($request);
-        return \app\Helper\handleStatusCodes(Response::HTTP_CREATED, '', [$User]);
+      
+
+        return \app\Helper\handleStatusCodes(Response::HTTP_CREATED, 'ایمیل خود را چک کنید', [$User]);
 
 
 
