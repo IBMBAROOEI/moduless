@@ -8,6 +8,7 @@ use barooei\User\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 
  class UserRepo{
 
@@ -48,7 +49,9 @@ use Illuminate\Support\Facades\Mail;
         $user->password = bcrypt($request->password);
         $user->save();
         $token = JWTAuth::fromUser($user);
-        $verificationLink = url('api/email/verify/' . $token);
+
+
+        $verificationLink = URL::signedRoute('verification.verify', ['id' => $user->id, 'hash' => sha1($user->email)]);
 
         Mail::to($user->email)->send(new VerificationEmail($verificationLink));
 

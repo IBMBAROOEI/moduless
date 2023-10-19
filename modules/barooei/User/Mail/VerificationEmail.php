@@ -11,13 +11,11 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
-
 class VerificationEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-
-public $verificationUrl;
+    public $verificationUrl;
 
     public function __construct($verificationUrl)
     {
@@ -30,14 +28,13 @@ public $verificationUrl;
     public function envelope(): Envelope
     {
         return new Envelope(
-            
-            subject: 'Laravel Ten Test Mail',
+            subject: 'Verification Email',
         );
     }
 
-    // /**
-    //  * Get the message content definition.
-    //  */
+    /**
+     * Get the message content definition.
+     */
     public function content(): Content
     {
         // return new Content(
@@ -47,7 +44,7 @@ public $verificationUrl;
 
         return new Content(
 
-            view: 'User::email',
+            markdown: 'User::email',
 
             with: [
                 'verificationUrl' =>  $this->verificationUrl
@@ -55,23 +52,14 @@ public $verificationUrl;
             ],
         );
     }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
     }
-
-    // /**
-    //  * Get the attachments for the message.
-    //  *
-    //  * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-    //  */
-    // public function attachments(): array
-    // {
-    //     return [];
-    // }
-
-
-//     public function build()
-// {
-//     return $this->view('view.email')
-//                 ->subject('Verification Email')
-
-// }
-
+}

@@ -1,18 +1,10 @@
-<html>
-<head>
+@component('mail::message')
 
 
+@component('mail::button', ['url' => $verificationUrl])
+Visit Our Website
+@endcomponent
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport">
-    <title>Email verification</title>
-
-    <a href="{{$verificationUrl}}"
-</head>
-
-
-
-</html>
-
-
+Thanks,
+{{ config('app.name') }}
+@endcomponent

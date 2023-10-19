@@ -13,11 +13,15 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 use App\Helper\Helpervalidate;
 
+use barooei\User\Mail\VerificationEmail;
 
 use Illuminate\Http\Response;
 
 use barooei\User\Repositories\UserRepo;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 
 class AuthUsersController extends Controller
@@ -37,21 +41,16 @@ class AuthUsersController extends Controller
     {
 
 
-       Helpervalidate::helpervalidation($request);
-       $credentials = $request->only('email', 'password');
+        Helpervalidate::helpervalidation($request);
+        $credentials = $request->only('email', 'password');
 
-       $token=$this->repo->login($credentials);
+        $token = $this->repo->login($credentials);
 
-       if(!$token){
-        return \app\Helper\handleStatusCodes(Response::HTTP_UNAUTHORIZED, '', []);
-       }
+        if (!$token) {
+            return \app\Helper\handleStatusCodes(Response::HTTP_UNAUTHORIZED, '', []);
+        }
 
         return \app\Helper\handleStatusCodes(Response::HTTP_OK, '', [$token]);
-
-
-
-
-
     }
 
 
@@ -62,15 +61,10 @@ class AuthUsersController extends Controller
     public function register(UserRequest $request)
     {
         Helpervalidate::helpervalidation($request);
-        $User=$this->repo->register($request);
-      
+        $User = $this->repo->register($request);
+
 
         return \app\Helper\handleStatusCodes(Response::HTTP_CREATED, 'ایمیل خود را چک کنید', [$User]);
-
-
-
-
-
     }
 
 
@@ -124,25 +118,4 @@ class AuthUsersController extends Controller
     }
 
 
-
-
-
-
-    public function helpervalidation(Request $request)
-    {
-
-
-
-        $validatedData = $request->validated();
-
-        $validator = $this->getValidationFactory()->make($request->all(), $request->rules());
-
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-
-        return $validatedData;
-    }
 }
